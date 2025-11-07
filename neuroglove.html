@@ -1,0 +1,634 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Neuro Glove Assistance — Final</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f3f7f7; --card:#fff; --accent:#0f766e; --accent-2:#0b9a90; --muted:#6b7280;
+  --radius:12px; --shadow: 0 10px 24px rgba(2,6,23,0.07);
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg),#fff);font-family:Inter,system-ui,'Segoe UI',Roboto,'Poppins',sans-serif;color:#042a27;zoom:0.95}
+.wrap{max-width:1250px;margin:16px auto;padding:14px}
+.grid{display:grid;grid-template-columns:300px 1fr 320px;gap:18px;align-items:start}
+@media(max-width:1100px){.grid{grid-template-columns:1fr;}}
+.panel{background:var(--card);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow)}
+.brand{display:flex;gap:10px;align-items:center}
+.logo{width:52px;height:52px;border-radius:10px;background:linear-gradient(180deg,#19c7b3,#0f766e);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800}
+.h1{font-size:18px;margin:0}
+.muted{color:var(--muted);font-size:13px}
+.btn{background:var(--accent);color:white;padding:9px 12px;border-radius:10px;border:0;cursor:pointer;font-weight:700}
+.btn.ghost{background:transparent;border:1px solid rgba(4,42,39,0.06);color:var(--accent)}
+.small{font-size:13px;color:var(--muted)}
+
+/* doctor card */
+.doctor-card{margin-top:14px;padding:12px;border-radius:12px;background:linear-gradient(180deg,#f7fffd,#eefdfb);border:1px solid rgba(11,110,107,0.06);display:flex;gap:12px;align-items:center}
+.avatar{width:56px;height:56px;border-radius:10px;background:linear-gradient(180deg,#eafbf9,#dff3f2);display:flex;align-items:center;justify-content:center;font-weight:800;color:#07594f;flex-shrink:0}
+.doc-main{flex:1;min-width:0}
+.doc-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.doc-name{font-weight:800;color:#064a44;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.doc-spec{color:var(--muted);margin-top:6px;font-size:13px}
+.doc-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:10px;gap:12px}
+.phone-link{color:var(--accent);font-weight:700;text-decoration:none;white-space:nowrap}
+.right-actions{display:flex;align-items:center;gap:8px}
+.distance{color:#07594f;font-weight:700;min-width:80px;text-align:right}
+.directions{color:var(--accent-2);font-weight:700;text-decoration:none;cursor:pointer;padding:6px 10px;border-radius:8px;background:rgba(11,154,144,0.06);border:1px solid rgba(11,154,144,0.08)}
+
+/* helplines */
+.helplines{margin-top:14px}
+.helplines .row{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:8px}
+.helplines .row+ .row{margin-top:8px}
+.helplines .label{color:var(--muted)}
+.helplines .value a{color:var(--accent);font-weight:700;text-decoration:none}
+
+/* center main monitor */
+.main{background:linear-gradient(180deg,#053c3a,#0f574f);border-radius:14px;padding:14px;color:white;box-shadow:var(--shadow);display:flex;flex-direction:column;min-height:720px}
+.main-top{display:flex;align-items:center;gap:12px}
+.title{font-weight:800;font-size:20px}
+.inventor{font-size:13px;color:rgba(255,255,255,0.85)}
+.actions{margin-left:auto;display:flex;gap:12px;align-items:center}
+.lang-select{display:flex;gap:8px;align-items:center}
+select{padding:8px;border-radius:8px;border:0;background:rgba(255,255,255,0.06);color:white;appearance:none}
+select option{color:#042a27;background:#fff}
+.searchBtn{background:#0cb79f;padding:8px 12px;border-radius:10px;border:0;color:white;font-weight:700;cursor:pointer}
+.monitor-wrap{margin-top:12px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));padding:12px;border-radius:12px;flex:1;display:flex;flex-direction:column}
+.monitor-header{display:flex;align-items:center;gap:12px}
+.monitor-title{font-weight:700}
+.conn-buttons{margin-left:auto;display:flex;gap:8px}
+.conn-buttons button{background:transparent;border:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.95);padding:8px 10px;border-radius:8px;cursor:pointer}
+.monitor{background:rgba(0,0,0,0.14);border-radius:8px;padding:12px;margin-top:12px;color:#e6fbf8;font-family:Menlo,monospace;font-size:13px;line-height:1.5;height:420px;overflow:auto}
+.mon-controls{display:flex;gap:8px;margin-top:12px}
+.mon-controls input{flex:1;padding:10px;border-radius:10px;border:0;background:rgba(255,255,255,0.06);color:white}
+.toggle{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,0.8)}
+footer{margin-top:12px;display:flex;justify-content:space-between;color:rgba(255,255,255,0.75);font-size:12px}
+
+/* right column */
+.right .panel{padding:12px}
+
+/* responsive */
+@media(max-width:700px){
+  .doctor-card .doc-bottom{flex-direction:column;align-items:flex-start;gap:6px}
+  .doc-top{flex-direction:column;align-items:flex-start;gap:6px}
+}
+.small-muted{font-size:12px;color:var(--muted)}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="grid">
+      <!-- LEFT: Doctor + helplines -->
+      <div class="panel">
+        <div class="brand">
+          <div class="logo">NG</div>
+          <div>
+            <div class="h1">Neuro Glove</div>
+            <div class="muted">Assistance • Inventor: Naitik Anand</div>
+          </div>
+        </div>
+
+        <div style="margin-top:10px">
+          <h3 id="findTitle">Find Doctors</h3>
+          <div id="findDesc" class="small">Search specialized doctors, view profile and get directions & contact.</div>
+        </div>
+
+        <div class="cta" style="margin-top:12px">
+          <button class="btn" id="btnNearbyDoctors">Search nearby doctors</button>
+          <button class="btn ghost" id="btnNearbyHosp">Search nearby hospitals</button>
+        </div>
+
+        <!-- doctor card -->
+        <div class="doctor-card" id="doctorCard" style="display:none" aria-live="polite">
+          <div class="avatar" id="docInitial">AN</div>
+          <div class="doc-main">
+            <div class="doc-top">
+              <div style="min-width:0">
+                <div id="docName" class="doc-name">Dr. Anjali Nair</div>
+              </div>
+            </div>
+            <div id="docSpec" class="doc-spec">Physiotherapist</div>
+            <div class="doc-bottom">
+              <div><a id="docPhone" class="phone-link" href="tel:+918765432101">+91 87654 32101</a></div>
+              <div class="right-actions">
+                <div id="docDist" class="distance">930 m</div>
+                <a id="docDir" class="directions">Directions</a>
+                <a id="whatsappBtn" class="directions" style="margin-left:6px;background:rgba(37,211,102,0.08);border-color:rgba(37,211,102,0.1)">WhatsApp</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- helplines -->
+        <div class="helplines" style="margin-top:14px">
+          <h4 style="margin:0 0 8px 0">Helplines</h4>
+
+          <div class="row" style="background:linear-gradient(90deg,#f8fffe,#f2fffb);padding:10px;border-radius:8px">
+            <div class="label">Hospital helpline</div>
+            <div class="value"><a id="hospitalPhone" href="tel:+911122334455">+91 11 2233 4455</a></div>
+          </div>
+
+          <div class="row" style="background:linear-gradient(90deg,#fff,#f7f9f8);margin-top:8px;padding:10px;border-radius:8px">
+            <div class="label">Police</div>
+            <div class="value"><a href="tel:100">100</a></div>
+          </div>
+
+          <div class="row" style="background:linear-gradient(90deg,#fff,#f7f9f8);margin-top:8px;padding:10px;border-radius:8px">
+            <div class="label">Ambulance</div>
+            <div class="value"><a href="tel:102">102</a></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CENTER: Serial monitor -->
+      <div class="main" role="main">
+        <div class="main-top">
+          <div>
+            <div class="title">Neuro Glove Assistance</div>
+            <div class="inventor small-muted">Inventor: Naitik Anand</div>
+          </div>
+
+          <div class="actions">
+            <div class="lang-select">
+              <label class="small" for="lang" style="color:rgba(255,255,255,0.85);margin-right:6px">Language</label>
+              <select id="lang" aria-label="Select language">
+                <option value="en">English</option>
+                <option value="hi">हिन्दी</option>
+                <option value="bn">বাংলা</option>
+                <option value="mr">मराठी</option>
+                <option value="ta">தமிழ்</option>
+                <option value="te">తెలుగు</option>
+                <option value="kn">ಕನ್ನಡ</option>
+                <option value="gu">ગુજરાતી</option>
+                <option value="pa">ਪੰਜਾਬੀ</option>
+                <option value="or">ଓଡ଼ିଆ</option>
+                <option value="ml">മലയാളം</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="monitor-wrap" aria-live="polite">
+          <div class="monitor-header">
+            <div class="monitor-title" id="monitorTitle">Serial Monitor</div>
+            <div class="conn-buttons">
+              <button id="btConnect">Bluetooth</button>
+              <button id="serialOpen">USB Serial</button>
+              <button id="disconnect" style="display:none">Disconnect</button>
+            </div>
+          </div>
+
+          <div style="margin-top:10px;display:flex;align-items:center;gap:10px;color:rgba(255,255,255,0.9)">
+            <input type="checkbox" id="viewHistoryChk" /> <label for="viewHistoryChk" style="margin:0;color:rgba(255,255,255,0.9)">View History:</label>
+            <input id="historyDate" type="date" style="background:#fff;border-radius:6px;border:0;padding:6px" />
+          </div>
+
+          <div id="monitor" class="monitor" role="log" aria-atomic="false"></div>
+
+          <div class="mon-controls">
+            <input id="cmdInput" placeholder="Type a command or message to send to device" />
+            <button class="btn" id="btnSend">Send</button>
+            <label class="toggle" title="Auto-translate incoming serial text?">
+              <input type="checkbox" id="autoTranslate" style="vertical-align:middle;margin-left:6px" /> Auto-translate
+            </label>
+          </div>
+        </div>
+
+        <footer>
+          <div>Run on HTTPS / localhost for Bluetooth, Serial, Geolocation</div>
+          <div>Supports BLE (HM-10) & Web Serial. HC-05 (classic) is not supported in browsers.</div>
+        </footer>
+      </div>
+
+      <!-- RIGHT: info -->
+      <div class="panel right">
+        <h3 style="margin:0 0 8px 0">Quick Info</h3>
+        <div class="small">Use left panel to find doctors and helplines. Use center panel to connect to device via Bluetooth or USB Serial and view logs.</div>
+        <div style="margin-top:12px">
+          <div style="font-weight:700;margin-bottom:6px">Notes</div>
+          <ul style="padding-left:18px;margin:0;color:var(--muted)">
+            <li>Serve on HTTPS / localhost for device features.</li>
+            <li>Auto-translate uses offline phrase map (extendable).</li>
+            <li>Web Bluetooth works only with BLE devices (e.g. HM-10). HC-05 classic SPP will not show UART characteristics.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- ---------------------------
+     JAVASCRIPT: behavior & features
+     --------------------------- -->
+<script>
+/* ========== CONFIG ========== */
+/*
+  Replace the placeholder below with YOUR Google Maps JavaScript API KEY
+  that has Maps JavaScript API and Places Library enabled.
+
+  Example:
+    const GMAP_API_KEY = 'AIzaSy...';
+*/
+const GMAP_API_KEY = 'YOUR_GOOGLE_MAPS_API_KEY'; // <-- REPLACE with your key, or leave blank to fallback to map search
+
+/* ========== TRANSLATIONS (offline simple map) ========== */
+const TRANSLATIONS = {
+  en: {},
+  hi: { 'Device ready':'डिवाइस तैयार','Hand open':'हाथ खुला','Hand closed':'हाथ बंद','Need assistance':'सहायता चाहिए','Nearest doctor':'सबसे नज़दीकी डॉक्टर','Sent:':'भेजा:' },
+  bn: { 'Device ready':'ডিভাইস প্রস্তুত','Hand open':'হাত খোলা','Hand closed':'হাত বন্ধ','Need assistance':'সাহায্য দরকার','Nearest doctor':'নিকটতম ডাক্তার','Sent:':'পাঠানো:' },
+  mr: { 'Device ready':'डिव्हाइस तयार','Hand open':'हात उघडे','Hand closed':'हात बंद','Need assistance':'मदत हवी आहे','Nearest doctor':'निकटचा डॉक्टर','Sent:':'पठवले:' },
+  ta: { 'Device ready':'சாதனம் தயாராக உள்ளது','Hand open':'கை திறந்துள்ளது','Hand closed':'கை மூடப்பட்டுள்ளது','Need assistance':'உதவி தேவை','Nearest doctor':'அருகில் டாக்டர்','Sent:':'அனுப்பப்பட்டது:' },
+  te: { 'Device ready':'పరికరం సిద్ధం','Hand open':'చేతి తెరవబడింది','Hand closed':'చేతి మూసి ఉంది','Need assistance':'సహాయం కావాలి','Nearest doctor':'సమీప వైద్యుడు','Sent:':'పంపారు:' },
+  kn: { 'Device ready':'ಸಾಧನ ಸಿದ್ದವಾಗಿದೆ','Hand open':'ಹಸ್ತ ತೆರೆದಿದೆ','Hand closed':'ಹಸ್ತ ಮುಚ್ಚಿದೆ','Need assistance':'ಸಹಾಯ ಬೇಕು','Nearest doctor':'ಎತ್ತಿನವನು ವೈದ್ಯ','Sent:':'ಕಳುಹಿಸಲಾಗಿದೆ:' },
+  gu: { 'Device ready':'ડિવાઇસ તૈયાર છે','Hand open':'હાથ ખુલ્લો છે','Hand closed':'હાથ બંધ છે','Need assistance':'મદદ જોઈએ','Nearest doctor':'નજીકનો ડૉક્ટર','Sent:':'મોકલાયું:' },
+  pa: { 'Device ready':'ਡਿਵਾਈਸ ਤਿਆਰ','Hand open':'ਹੱਥ ਖੁੱਲਾ','Hand closed':'ਹੱਥ ਬੰਦ','Need assistance':'ਸਹਾਇਤਾ ਦੀ ਲੋੜ ਹੈ','Nearest doctor':'ਇਕ ਨੇੜਲਾ ਡਾਕਟਰ','Sent:':'ਭੇਜਿਆ:' },
+  or: { 'Device ready':'ଡିଭାଇସ୍ ପ୍ରସ୍ତୁତ','Hand open':'ହାତ ଖୋଲିଗଲା','Hand closed':'ହାତ ବନ୍ଦ','Need assistance':'ସାହାଯ୍ୟ ଆବଶ୍ୟକ','Nearest doctor':'ନିକଟ ଡାକ୍ତର','Sent:':'ପଠାଗଲା:' },
+  ml: { 'Device ready':'ഡിവൈസ് സജ്ജമാണ്','Hand open':'കൈ തുറന്നു','Hand closed':'കൈ അടച്ചു','Need assistance':'സഹായം വേണം','Nearest doctor':'ആസൂത്രിത ഡോക്ടർ','Sent:':'അയച്ചു:' }
+};
+
+/* ========== UI strings for labels ========== */
+const UI_STRINGS = {
+  en:{ findTitle:'Find Doctors', findDesc:'Search specialized doctors, view profile and get directions & contact.', nearbyDoctors:'Search nearby doctors', nearbyHospitals:'Search nearby hospitals', serialMonitor:'Serial Monitor', cmdPlaceholder:'Type a command or message to send to device', send:'Send', viewHistory:'View History:' },
+  hi:{ findTitle:'डॉक्टर खोजें', findDesc:'विशेषज्ञ डॉक्टर खोजें, प्रोफ़ाइल देखें तथा दिशानिर्देश व संपर्क प्राप्त करें।', nearbyDoctors:'निकट के डॉक्टर खोजें', nearbyHospitals:'निकट के अस्पताल खोजें', serialMonitor:'सीरियल मॉनिटर', cmdPlaceholder:'डिवाइस को भेजने के लिए कमांड लिखें', send:'भेजें', viewHistory:'इतिहास देखें:' },
+  bn:{ findTitle:'ডাক্তার খুঁজুন', findDesc:'বিশেষজ্ঞ ডাক্তার খুঁজুন, প্রোফাইল দেখুন ও নির্দেশনা ও যোগাযোগ জানুন।', nearbyDoctors:'নিকটবর্তী চিকিৎসক খুঁজুন', nearbyHospitals:'নিকটস্থ হাসপাতাল খুঁজুন', serialMonitor:'সিরিয়াল মনিটর', cmdPlaceholder:'ডিভাইসে পাঠানোর জন্য কমান্ড টাইপ করুন', send:'পাঠান', viewHistory:'ইতিহাস দেখুন:' },
+  mr:{ findTitle:'डॉक्टर शोधा', findDesc:'विशेष डॉक्टर शोधा, प्रोफाइल पाहा आणि मार्गदर्शन व संपर्क मिळवा.', nearbyDoctors:'जवळचे डॉक्टर शोधा', nearbyHospitals:'जवळची रुग्णालये शोधा', serialMonitor:'सीरियल मॉनिटर', cmdPlaceholder:'डिव्हाइसला पाठवण्यासाठी कमांड टाका', send:'पाठवा', viewHistory:'इतिहास पहा:' },
+  ta:{ findTitle:'மருத்துவரை காண்க', findDesc:'மூலவிடை மருத்துவர்களை கண்டறியவும், சுயவிவரங்களைக் காண்க மற்றும் வழிமுறைகள் பெறுங்கள்.', nearbyDoctors:'உங்கள் அருகிலுள்ள மருத்துவரைத் தேடுங்கள்', nearbyHospitals:'பக்கத்திலுள்ள மருத்துவமனைகள்', serialMonitor:'ஸீரியல் மானிட்டர்', cmdPlaceholder:'சாதனத்திற்கு அனுப்ப கட்டளை அல்லது செய்தியை உள்ளிடவும்', send:'அனுப்பு', viewHistory:'வரலாறு:' },
+  te:{ findTitle:'డాక్టర్లను కనుగొనండి', findDesc:'నిపుణుల డాక్టర్లను కనుగొనండి, ప్రొఫైల్ చూడండి మరియు దిశలు మరియు సంప్రదింపులు పొందండి.', nearbyDoctors:'సమీప డాక్టర్‌లను వెతకండి', nearbyHospitals:'సమీప ఆసుపత్రులు', serialMonitor:'సిరియల్ మానిటర్', cmdPlaceholder:'పరికరానికి పంపడానికి కమాండ్ లేదా సందేశాన్ని టైప్ చేయండి', send:'పంపండి', viewHistory:'చరిత్ర:' },
+  kn:{ findTitle:'ಡಾಕ್ಟರ್ ಹುಡುಕಿ', findDesc:'ನಿಪುಣ ವೈದ್ಯರನ್ನು ಹುಡುಕಿ, ಪ್ರೊಫೈಲ್ ನೋಡಿ ದಿಕ್ಕುಗಳು ಮತ್ತು ಸಂಪರ್ಕ ಪಡೆಯಿರಿ.', nearbyDoctors:'ನಿಕಟದ ವೈದ್ಯರನ್ನು ಹುಡುಕಿ', nearbyHospitals:'ನಿಕಟದ ಆಸ್ಪತ್ರೆಗಳನ್ನು ಹುಡುಕಿ', serialMonitor:'ಸೀರಿಯಲ್ ಮಾನಿಟರ್', cmdPlaceholder:'ಡಿವೈಸ್‌ಗೆ ಕಮಾಂಡ್ ಅಥವಾ ಸಂದೇಶವನ್ನು ಟೈಪ್ ಮಾಡಿ', send:'ಕಳುಹಿಸಿ', viewHistory:'ಇತಿಹಾಸ:' },
+  gu:{ findTitle:'ડાક્ટરો શોધો', findDesc:'વિશેષ ડોકટરો શોધો, પ્રોફાઇલ જુઓ અને દિશા અને સંપર્ક મેળવો.', nearbyDoctors:'નજીકના ડોકટરો શોધો', nearbyHospitals:'નજીકના હોસ્પિટલ શોધો', serialMonitor:'સીરિયલ મૉનિટર', cmdPlaceholder:'ડિવાઇસને મોકલવા માટે કમાન્ડ લખો', send:'મોકલો', viewHistory:'ઇતિહાસ:' },
+  pa:{ findTitle:'ਡਾਕਟਰ ਲੱਭੋ', findDesc:'ਮਾਹਰ ਡਾਕਟਰ ਲੱਭੋ, ਪ੍ਰੋਫਾਈਲ ਦੇਖੋ ਅਤੇ ਦਿਸ਼ਾ-ਨਿਰਦੇਸ਼ ਅਤੇ ਸੰਪਰਕ ਪ੍ਰਾਪਤ ਕਰੋ।', nearbyDoctors:'ਨਜ਼ਦੀਕੀ ਡਾਕਟਰ ਲੱਭੋ', nearbyHospitals:'ਨਜ਼ਦੀਕੀ ਹਸਪਤਾਲ ਲੱਭੋ', serialMonitor:'ਸੀਰੀਅਲ ਮਾਨੀਟਰ', cmdPlaceholder:'ਡਿਵਾਈਸ ਨੂੰ ਭੇਜਣ ਲਈ ਕਮਾਂਡ ਲਿਖੋ', send:'ਭੇਜੋ', viewHistory:'ਇਤਿਹਾਸ:' },
+  or:{ findTitle:'ଡାକ୍ତର ଖୋଜନ୍ତୁ', findDesc:'ବିଶେଷଜ୍ଞ ଡାକ୍ତରଙ୍କୁ ଖୋଜନ୍ତୁ, ପ୍ରୋଫାଇଲ୍ ଦେଖନ୍ତୁ ଏବଂ ଦିଗ ଓ ସଂଯୋଗ ପାଆନ୍ତୁ।', nearbyDoctors:'ନିକଟସ୍ଥ ଡାକ୍ତର ଖୋଜନ୍ତୁ', nearbyHospitals:'ନିକଟସ୍ଥ ହସ୍ପିଟାଲ ଖୋଜନ୍ତୁ', serialMonitor:'ସିରିୟାଲ ମନିଟର', cmdPlaceholder:'ଡିଭାଇସ୍‌କୁ ପଠାଇବାକୁ କମାଣ୍ଡ କିମ୍ବା ବାର୍ତ୍ତା ଟାଇପ୍ କରନ୍ତୁ', send:'ପଠାନ୍ତୁ', viewHistory:'ଇତିହାସ:' },
+  ml:{ findTitle:'ഡോക്ടർമാരെ കണ്ടെത്തുക', findDesc:'നിപുണ ഡോക്ടർമാരെ കണ്ടെത്തുക, പ്രൊഫൈൽ കാണുക, മാർഗ്ഗനിർദ്ദേശങ്ങളും ബന്ധങ്ങളും നേടുക.', nearbyDoctors:'സമീപ ഡോക്ടർമാർ കണ്ടെത്തുക', nearbyHospitals:'സമീപ ആശുപത്രികൾ കണ്ടെത്തുക', serialMonitor:'സീരിയൽ മോണിറ്റർ', cmdPlaceholder:'ഡിവൈസിലേക്കുള്ള കമാൻഡ് അല്ലെങ്കിൽ സന്ദേശം ടൈപ്പ് ചെയ്യുക', send:'അയയ്ക്കുക', viewHistory:'ചരിത്രം:' }
+};
+function applyUIStrings(code){
+  const S = UI_STRINGS[code] || UI_STRINGS.en;
+  document.getElementById('findTitle').innerText = S.findTitle;
+  document.getElementById('findDesc').innerText = S.findDesc;
+  document.getElementById('btnNearbyDoctors').innerText = S.nearbyDoctors;
+  document.getElementById('btnNearbyHosp').innerText = S.nearbyHospitals;
+  document.getElementById('monitorTitle').innerText = S.serialMonitor;
+  document.getElementById('cmdInput').placeholder = S.cmdPlaceholder;
+  document.getElementById('btnSend').innerText = S.send;
+}
+const langEl = document.getElementById('lang');
+langEl.addEventListener('change', ()=> { applyUIStrings(langEl.value); if(document.getElementById('autoTranslate').checked) reloadLogsTranslated(); });
+applyUIStrings(langEl.value);
+
+/* ========== Helpers ========== */
+function toRad(v){ return v * Math.PI / 180; }
+function haversine(lat1,lon1,lat2,lon2){
+  const R=6371; const dLat=toRad(lat2-lat1); const dLon=toRad(lon2-lon1);
+  const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLon/2)**2;
+  const c = 2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  return R*c; // km
+}
+function formatDistance(dKm){
+  if(isNaN(dKm)) return '--';
+  if(dKm < 1) return `${Math.round(dKm*1000)} m`;
+  return `${dKm.toFixed(2)} km`;
+}
+function appendMonitor(text, dir='in'){
+  const now = new Date(); const ts = now.toLocaleTimeString();
+  if(document.getElementById('autoTranslate').checked){
+    translateSerial(text, langEl.value).then(translated=>{
+      _append(ts, dir, translated);
+      saveLog(now, `${ts} ${dir==='in'?'IN':'OUT'} ${translated}`);
+    }).catch(()=>{ _append(ts,dir,text); saveLog(now, `${ts} ${dir==='in'?'IN':'OUT'} ${text}`); });
+  } else {
+    _append(ts,dir,text);
+    saveLog(now, `${ts} ${dir==='in'?'IN':'OUT'} ${text}`);
+  }
+}
+function _append(ts,dir,text){
+  const line = `${ts} ${dir==='in'?'⟵':'⟶'} ${text}`;
+  const el = document.createElement('div'); el.textContent = line;
+  document.getElementById('monitor').appendChild(el);
+  document.getElementById('monitor').scrollTop = document.getElementById('monitor').scrollHeight;
+}
+function saveLog(date,line){
+  const key = `ng_logs_${date.toISOString().slice(0,10)}`;
+  const arr = JSON.parse(localStorage.getItem(key) || '[]');
+  arr.push(line);
+  localStorage.setItem(key, JSON.stringify(arr));
+}
+
+/* ========== TRANSLATION ENGINE ========== */
+async function translateSerial(text, targetLang){
+  if(!TRANSLATIONS[targetLang]) return text;
+  let t = text;
+  const map = TRANSLATIONS[targetLang];
+  const keys = Object.keys(map).sort((a,b)=>b.length-a.length);
+  keys.forEach(k=>{
+    const v = map[k];
+    const esc = k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    t = t.replace(new RegExp(esc, 'gi'), v);
+  });
+  return t;
+}
+function reloadLogsTranslated(){
+  const todayKey = `ng_logs_${new Date().toISOString().slice(0,10)}`;
+  const arr = JSON.parse(localStorage.getItem(todayKey) || '[]');
+  const monitorEl = document.getElementById('monitor');
+  monitorEl.innerHTML = '';
+  if(arr.length===0) return;
+  Promise.all(arr.map(l => translateSerial(l.replace(/^\d{1,2}:\d{2}:\d{2}\s/,''), langEl.value))).then(lines=>{
+    lines.forEach(ln=>{ const el = document.createElement('div'); el.textContent = ln; monitorEl.appendChild(el); });
+    monitorEl.scrollTop = monitorEl.scrollHeight;
+  }).catch(()=>{ arr.forEach(ln=>{ const el=document.createElement('div'); el.textContent=ln; monitorEl.appendChild(el); }); });
+}
+
+/* ========== HISTORY ========== */
+const viewHistoryChk = document.getElementById('viewHistoryChk');
+const historyDate = document.getElementById('historyDate');
+historyDate.addEventListener('change', ()=> {
+  if(viewHistoryChk.checked) loadLogsForDate(new Date(historyDate.value));
+});
+viewHistoryChk.addEventListener('change', ()=> {
+  if(viewHistoryChk.checked && historyDate.value) loadLogsForDate(new Date(historyDate.value));
+  else if(!viewHistoryChk.checked) document.getElementById('monitor').innerHTML = '';
+});
+function loadLogsForDate(date){
+  if(!date || isNaN(date.getTime())) return;
+  const key = `ng_logs_${date.toISOString().slice(0,10)}`;
+  const arr = JSON.parse(localStorage.getItem(key) || '[]');
+  const monitorEl = document.getElementById('monitor');
+  monitorEl.innerHTML = '';
+  if(arr.length===0){ monitorEl.textContent = 'No logs for this date.'; return; }
+  if(document.getElementById('autoTranslate').checked){
+    Promise.all(arr.map(l => translateSerial(l.replace(/^\d{1,2}:\d{2}:\d{2}\s/,''), langEl.value))).then(lines=>{
+      lines.forEach(ln=>{ const el = document.createElement('div'); el.textContent = ln; monitorEl.appendChild(el); });
+    });
+  } else {
+    arr.forEach(ln=>{ const el=document.createElement('div'); el.textContent=ln; monitorEl.appendChild(el); });
+  }
+}
+
+/* ========== Google Maps / Places logic ========== */
+/*
+  Uses client-side Places Library via Maps JavaScript API.
+  If GMAP_API_KEY is blank or not replaced, we fallback to opening Google Maps search.
+*/
+let gmapsLoaded = false;
+function loadGoogleMapsIfNeeded(callback){
+  if(!GMAP_API_KEY || GMAP_API_KEY === 'YOUR_GOOGLE_MAPS_API_KEY'){
+    callback(false);
+    return;
+  }
+  if(gmapsLoaded){ callback(true); return; }
+  const s = document.createElement('script');
+  s.src = `https://maps.googleapis.com/maps/api/js?key=${GMAP_API_KEY}&libraries=places&callback=__gmapInit`;
+  s.async = true; s.defer = true;
+  window.__gmapInit = ()=>{ gmapsLoaded = true; callback(true); };
+  s.onerror = ()=>{ console.warn('Failed to load Google Maps JS'); callback(false); };
+  document.head.appendChild(s);
+}
+
+/* When Search Nearby Doctors clicked: use Places NearbySearch with radius 1000m,
+   then pick nearest place whose distance is between 0.9km and 1.0km inclusive.
+   If found: display details in the doctor card (including phone if available).
+   If not found: fallback to message (and optionally show nearest if you prefer).
+*/
+const btnNearbyDoctors = document.getElementById('btnNearbyDoctors');
+const btnNearbyHosp = document.getElementById('btnNearbyHosp');
+const doctorCard = document.getElementById('doctorCard');
+const docInitial = document.getElementById('docInitial');
+const docName = document.getElementById('docName');
+const docSpec = document.getElementById('docSpec');
+const docPhone = document.getElementById('docPhone');
+const docDist = document.getElementById('docDist');
+const docDir = document.getElementById('docDir');
+const whatsappBtn = document.getElementById('whatsappBtn');
+
+btnNearbyDoctors.addEventListener('click', ()=> {
+  if(!navigator.geolocation){ alert('Geolocation not supported'); return; }
+  appendMonitor('Requesting location...', 'out');
+  navigator.geolocation.getCurrentPosition(pos=>{
+    const lat = pos.coords.latitude, lon = pos.coords.longitude;
+    // load maps lib
+    loadGoogleMapsIfNeeded((ok)=>{
+      if(!ok){
+        // fallback: open map search for doctors and instruct user to click small pins
+        appendMonitor('Google Maps API key missing — opening map search (fallback).', 'in');
+        openMapsSearch('doctors', lat, lon);
+        return;
+      }
+      // Use Places Service: search types 'doctor','physiotherapist','clinic','hospital' near
+      const center = new google.maps.LatLng(lat, lon);
+      const map = new google.maps.Map(document.createElement('div'));
+      const service = new google.maps.places.PlacesService(map);
+      const request = {
+        location: center,
+        radius: 1000, // 1 km
+        type: ['health'] // broader
+      };
+      service.nearbySearch(request, (results, status) => {
+        if(status !== google.maps.places.PlacesServiceStatus.OK || !results || results.length===0){
+          appendMonitor('No nearby healthcare places found (Places API).', 'in');
+          alert('No nearby healthcare places found.');
+          return;
+        }
+        // compute distances and filter 0.9 - 1.0 km
+        const enriched = results.map(r=>{
+          const d = haversine(lat, lon, r.geometry.location.lat(), r.geometry.location.lng());
+          return {...r, distKm: d};
+        }).sort((a,b)=>a.distKm-b.distKm);
+        const inBand = enriched.filter(r => r.distKm >= 0.9 && r.distKm <= 1.0);
+        if(inBand.length === 0){
+          appendMonitor('No clinics/doctors found within 900m-1.0km.', 'in');
+          alert('No doctors found within 900 m - 1.0 km of your location.');
+          return;
+        }
+        // pick nearest in band
+        const place = inBand[0];
+        // get details (phone) then display
+        service.getDetails({ placeId: place.place_id, fields: ['name','formatted_phone_number','types','geometry','vicinity'] }, (pd, st2)=>{
+          const name = pd && pd.name ? pd.name : (place.name || 'Clinic');
+          const phone = (pd && pd.formatted_phone_number) ? pd.formatted_phone_number : (place.vicinity? '':'');
+          const types = (pd && pd.types) ? pd.types.join(', ') : (place.types?place.types.join(', '):'');
+          showDoctorCard({ name, phone, types, lat: place.geometry.location.lat(), lon: place.geometry.location.lng(), distKm: place.distKm });
+          appendMonitor(`Nearest doctor: ${name} (${formatDistance(place.distKm)})`, 'in');
+        });
+      });
+    });
+  }, err=>{
+    appendMonitor('Location error: ' + err.message, 'in');
+    alert('Location error: ' + err.message);
+  }, { enableHighAccuracy:true, timeout:10000 });
+});
+
+function showDoctorCard(info){
+  doctorCard.style.display = 'flex';
+  const initials = info.name.split(' ').slice(0,2).map(n=>n[0]).join('').toUpperCase();
+  docInitial.innerText = initials;
+  docName.innerText = info.name;
+  docSpec.innerText = info.types || 'Clinic';
+  docPhone.href = info.phone ? ('tel:' + info.phone.replace(/\s+/g,'')) : '#';
+  docPhone.innerText = info.phone || 'Phone not available';
+  docDist.innerText = formatDistance(info.distKm);
+  // direction opens maps to the exact coordinates
+  docDir.onclick = ()=> {
+    openMapsDirections(info.lat, info.lon, info.name);
+  };
+  // WhatsApp button opens prefilled message (web or app)
+  whatsappBtn.onclick = ()=> {
+    if(!info.phone){ alert('Phone number not available'); return; }
+    const ph = info.phone.replace(/\D/g,'');
+    const msg = encodeURIComponent(`Hello ${info.name}, I found your clinic via Neuro Glove Assistance. I need assistance.`);
+    // if mobile, try whatsapp:// else web
+    const waUrl = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ? `https://wa.me/${ph}?text=${msg}` : `https://web.whatsapp.com/send?phone=${ph}&text=${msg}`;
+    window.open(waUrl,'_blank');
+  };
+}
+
+/* Nearby hospitals: simply open maps search around user's location (per your instruction) */
+btnNearbyHosp.addEventListener('click', ()=> {
+  if(!navigator.geolocation){ alert('Geolocation not supported'); return; }
+  navigator.geolocation.getCurrentPosition(pos=>{
+    const lat = pos.coords.latitude, lon = pos.coords.longitude;
+    openMapsSearch('hospitals', lat, lon);
+  }, err=>{ appendMonitor('Location error: ' + err.message, 'in'); alert('Location error: ' + err.message); }, { enableHighAccuracy:true, timeout:10000 });
+});
+
+/* open search map fallback */
+function openMapsSearch(query, lat, lon){
+  const ua = navigator.userAgent||'';
+  if(/iPhone|iPad|iPod/i.test(ua)){
+    window.open(`maps://maps.apple.com/?q=${encodeURIComponent(query)}&ll=${lat},${lon}`,'_blank');
+  } else {
+    window.open(`https://www.google.com/maps/search/${encodeURIComponent(query)}/@${lat},${lon},14z`,'_blank');
+  }
+}
+function openMapsDirections(lat, lon, label){
+  const ua = navigator.userAgent||'';
+  const q = encodeURIComponent(label || `${lat},${lon}`);
+  if(/iPhone|iPad|iPod/i.test(ua)){
+    window.open(`maps://maps.apple.com/?daddr=${lat},${lon}&q=${q}`,'_blank');
+  } else {
+    window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}&travelmode=driving`,'_blank');
+  }
+}
+
+/* ========== Web Bluetooth (BLE) & Web Serial ========== */
+let device = null, gattServer = null, txChar = null, rxChar = null;
+let port = null, reader = null, keepReading = false;
+
+async function connectBluetooth(){
+  if(!navigator.bluetooth){ alert('Web Bluetooth is not available. Use Chrome/Edge on HTTPS.'); return; }
+  try{
+    appendMonitor('Requesting Bluetooth device...', 'out');
+    device = await navigator.bluetooth.requestDevice({ acceptAllDevices:true, optionalServices:['6e400001-b5a3-f393-e0a9-e50e24dcca9e','battery_service'] });
+    appendMonitor('Selected: ' + (device.name || 'Unknown'), 'in');
+    if(device.name && /HC-05|HC05|HC 05/i.test(device.name)){
+      appendMonitor('Detected HC-05 classic device. Web Bluetooth does NOT support classic SPP. Use HM-10 (BLE) or use USB Serial.', 'in');
+      return;
+    }
+    device.addEventListener('gattserverdisconnected', onGattDisconnected);
+    gattServer = await device.gatt.connect();
+    appendMonitor('GATT connected', 'in');
+    try{
+      const svc = await gattServer.getPrimaryService('6e400001-b5a3-f393-e0a9-e50e24dcca9e');
+      txChar = await svc.getCharacteristic('6e400003-b5a3-f393-e0a9-e50e24dcca9e'); // notify
+      rxChar = await svc.getCharacteristic('6e400002-b5a3-f393-e0a9-e50e24dcca9e'); // write
+      await txChar.startNotifications();
+      txChar.addEventListener('characteristicvaluechanged', e=>{
+        const text = new TextDecoder().decode(e.target.value);
+        appendMonitor(text, 'in');
+      });
+      appendMonitor('Connected to device (NUS UART)', 'in');
+      document.getElementById('disconnect').style.display = 'inline-block';
+      document.getElementById('btConnect').style.display = 'none';
+      document.getElementById('serialOpen').style.display = 'none';
+    }catch(e){
+      appendMonitor('Connected but UART not found on device.', 'in');
+      document.getElementById('disconnect').style.display = 'inline-block';
+      document.getElementById('btConnect').style.display = 'none';
+    }
+  }catch(err){
+    appendMonitor('Bluetooth error: ' + (err && err.message ? err.message : err), 'in');
+  }
+}
+function onGattDisconnected(){ appendMonitor('Bluetooth disconnected', 'in'); document.getElementById('disconnect').style.display='none'; document.getElementById('btConnect').style.display='inline-block'; document.getElementById('serialOpen').style.display='inline-block'; }
+
+async function writeBluetooth(text){
+  if(!rxChar){ appendMonitor('Bluetooth write not available', 'out'); return; }
+  try{ await rxChar.writeValue(new TextEncoder().encode(text + '\n')); appendMonitor('Sent: ' + text, 'out'); } catch(e){ appendMonitor('BT write error: '+ e.message, 'in'); }
+}
+
+/* Web Serial / USB */
+async function openSerial(){
+  if(!('serial' in navigator)){ alert('Web Serial not supported. Use Chrome/Edge on HTTPS.'); return; }
+  try{
+    port = await navigator.serial.requestPort();
+    await port.open({ baudRate: 115200 });
+    appendMonitor('Serial port opened', 'in');
+    document.getElementById('disconnect').style.display='inline-block';
+    document.getElementById('serialOpen').style.display='none';
+    document.getElementById('btConnect').style.display='none';
+    keepReading = true;
+    readSerialLoop();
+  }catch(e){
+    appendMonitor('Serial open error: '+(e && e.message? e.message: e), 'in');
+  }
+}
+async function readSerialLoop(){
+  while(port && port.readable && keepReading){
+    reader = port.readable.getReader();
+    try{
+      let buffer='';
+      while(true){
+        const { value, done } = await reader.read();
+        if(done) break;
+        if(value){
+          buffer += new TextDecoder().decode(value);
+          const parts = buffer.split(/\r?\n/);
+          buffer = parts.pop();
+          parts.forEach(p=>{
+            if(p && p.trim().length>0) appendMonitor(p.trim(), 'in');
+          });
+        }
+      }
+    }catch(e){ appendMonitor('Serial read error: '+(e && e.message? e.message: e), 'in'); }
+    finally { try{ reader.releaseLock(); }catch(_){ } break; }
+  }
+}
+async function writeSerial(text){
+  if(!port || !port.writable){ appendMonitor('Serial not open','out'); return; }
+  const writer = port.writable.getWriter();
+  try{ await writer.write(new TextEncoder().encode(text + '\n')); appendMonitor('Sent: ' + text, 'out'); } catch(e){ appendMonitor('Serial write error: '+(e && e.message? e.message: e),'in'); } finally { writer.releaseLock(); }
+}
+
+/* Disconnect both */
+async function disconnectAll(){
+  try{ if(gattServer && gattServer.connected) gattServer.disconnect(); }catch(e){}
+  try{ if(reader){ await reader.cancel(); reader=null; } }catch(e){}
+  try{ if(port){ await port.close(); port=null; } }catch(e){}
+  keepReading=false; port=null; reader=null; device=null; txChar=null; rxChar=null; gattServer=null;
+  appendMonitor('Disconnected', 'in');
+  document.getElementById('disconnect').style.display='none';
+  document.getElementById('btConnect').style.display='inline-block';
+  document.getElementById('serialOpen').style.display='inline-block';
+}
+
+/* wiring UI buttons */
+document.getElementById('btConnect').addEventListener('click', connectBluetooth);
+document.getElementById('serialOpen').addEventListener('click', openSerial);
+document.getElementById('disconnect').addEventListener('click', disconnectAll);
+
+/* send button */
+document.getElementById('btnSend').addEventListener('click', ()=>{
+  const txt = document.getElementById('cmdInput').value.trim(); if(!txt) return;
+  if(rxChar){ writeBluetooth(txt); }
+  else if(port){ writeSerial(txt); }
+  else { appendMonitor('No device connected to send', 'out'); }
+  document.getElementById('cmdInput').value = '';
+});
+document.getElementById('cmdInput').addEventListener('keydown', e=>{ if(e.key==='Enter') document.getElementById('btnSend').click(); });
+
+/* initial demo messages */
+setTimeout(()=> appendMonitor('Device ready','in'), 800);
+setTimeout(()=> appendMonitor('Hand open','in'), 1400);
+
+/* ========== End of script ========== */
+</script>
+</body>
+</html>
