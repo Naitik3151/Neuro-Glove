@@ -1,0 +1,9 @@
+{
+  "name": "Neuro Glove Assistance",
+  "description": "A web application to assist Neuro Glove users by providing tools to find nearby doctors and hospitals, connect to the device via Bluetooth or USB Serial to monitor output, and access emergency helplines.",
+  "requestFramePermissions": [
+    "geolocation",
+    "bluetooth",
+    "serial"
+  ]
+}
